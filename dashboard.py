@@ -5,7 +5,19 @@ import pandas as pd
 import mlflow
 from PIL import Image
 import os
+import boto3
 from sklearn.preprocessing import MinMaxScaler
+
+# Crée une session boto3 pour interagir avec AWS
+session = boto3.Session(
+    aws_access_key_id=os.getenv("AKIA47CRYSWPLHXWDH4B"),
+    aws_secret_access_key=os.getenv("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"),
+    region_name=os.getenv("eu-west-1")
+)
+
+# Accès au bucket S3
+s3 = session.resource('s3')
+bucket = s3.Bucket('mlflow-cfikri')
 
 # Configuration
 st.set_page_config(page_title="Dashboard ECG", layout="wide")
