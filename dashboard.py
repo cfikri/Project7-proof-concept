@@ -11,21 +11,10 @@ from sklearn.preprocessing import MinMaxScaler
 # Configuration
 st.set_page_config(page_title="Dashboard ECG", layout="wide")
 
-# Tester l'accès aux secrets
-st.write("AWS_ACCESS_KEY_ID:", st.secrets["aws"].get("AWS_ACCESS_KEY_ID", "Not Found"))
-st.write("AWS_SECRET_ACCESS_KEY:", st.secrets["aws"].get("AWS_SECRET_ACCESS_KEY", "Not Found"))
-st.write("AWS_DEFAULT_REGION:", st.secrets["aws"].get("AWS_DEFAULT_REGION", "Not Found"))
-
-# Crée une session boto3 pour interagir avec AWS
-session = boto3.Session(
-    aws_access_key_id=st.secrets["aws"]["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key=st.secrets["aws"]["AWS_SECRET_ACCESS_KEY"],
-    region_name=st.secrets["aws"]["AWS_DEFAULT_REGION"]
-)
-
-# Accès au bucket S3
-s3 = session.resource('s3')
-bucket = s3.Bucket('mlflow-fikri')
+# Définir les variables d'environnement pour MLflow
+os.environ["AWS_ACCESS_KEY_ID"] = st.secrets["aws"]["AWS_ACCESS_KEY_ID"]
+os.environ["AWS_SECRET_ACCESS_KEY"] = st.secrets["aws"]["AWS_SECRET_ACCESS_KEY"]
+os.environ["AWS_DEFAULT_REGION"] = st.secrets["aws"]["AWS_DEFAULT_REGION"]
 
 # Titre de l'application
 st.title("Dashboard de Classification d'ECG")
@@ -55,7 +44,7 @@ with col2:
 # Chargement du modèle depuis MLflow
 @st.cache_resource
 def load_model():
-    mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://ec2-52-209-5-80.eu-west-1.compute.amazonaws.com:5000"))
+    mlflow.set_tracking_uri(st.secrets["mlflow"]["MLFLOW_TRACKING_URI"])
     model_uri = "s3://mlflow-cfikri/0/6ef348d774dc484294f4123be9087ea9/artifacts/InceptionTime"
     return mlflow.tensorflow.load_model(model_uri)
 
