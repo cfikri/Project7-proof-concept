@@ -8,6 +8,11 @@ import os
 import boto3
 from sklearn.preprocessing import MinMaxScaler
 
+# Tester l'accès aux secrets
+st.write("AWS_ACCESS_KEY_ID:", st.secrets["aws"].get("AWS_ACCESS_KEY_ID", "Not Found"))
+st.write("AWS_SECRET_ACCESS_KEY:", st.secrets["aws"].get("AWS_SECRET_ACCESS_KEY", "Not Found"))
+st.write("AWS_DEFAULT_REGION:", st.secrets["aws"].get("AWS_DEFAULT_REGION", "Not Found"))
+
 # Crée une session boto3 pour interagir avec AWS
 session = boto3.Session(
     aws_access_key_id=st.secrets["aws"]["AWS_ACCESS_KEY_ID"],
