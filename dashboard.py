@@ -8,6 +8,9 @@ import os
 import boto3
 from sklearn.preprocessing import MinMaxScaler
 
+# Configuration
+st.set_page_config(page_title="Dashboard ECG", layout="wide")
+
 # Tester l'accès aux secrets
 st.write("AWS_ACCESS_KEY_ID:", st.secrets["aws"].get("AWS_ACCESS_KEY_ID", "Not Found"))
 st.write("AWS_SECRET_ACCESS_KEY:", st.secrets["aws"].get("AWS_SECRET_ACCESS_KEY", "Not Found"))
@@ -23,9 +26,6 @@ session = boto3.Session(
 # Accès au bucket S3
 s3 = session.resource('s3')
 bucket = s3.Bucket('mlflow-fikri')
-
-# Configuration
-st.set_page_config(page_title="Dashboard ECG", layout="wide")
 
 # Titre de l'application
 st.title("Dashboard de Classification d'ECG")
